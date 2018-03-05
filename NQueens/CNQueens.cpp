@@ -2,6 +2,8 @@
 #include "CNQueens.h"
 
 
+long long CNQueens::rejectedVariations;
+
 namespace
 {
     string BoardToString(vector<int> board, int n)
@@ -37,7 +39,6 @@ namespace
 
     bool ValidateVariation(vector<int>& board, int position)
     {
-
         // Check if adding queen at given position is valid
         int lastRow = static_cast<int>(board.size() - 1);
         for (int row = lastRow; row >= 0; row--)
@@ -47,6 +48,7 @@ namespace
                 return false;
 
             int offset = lastRow - row + 1;
+
             // diagonal left
             if ((position - offset) == board[row])
                 return false;
@@ -64,6 +66,8 @@ vector<string> CNQueens::SolveNQueens(int n)
 {
     vector<int> board;
     vector<string> result;
+
+    rejectedVariations = 0;
 
     SimpleSolver(result, board, n);
 
@@ -91,6 +95,10 @@ void CNQueens::SimpleSolver(vector<string>& result, vector<int>& board, int n)
 
             // Go deep
             SimpleSolver(result, newVariation, n);
+        }
+        else
+        {
+            rejectedVariations++;
         }
     }
 }
